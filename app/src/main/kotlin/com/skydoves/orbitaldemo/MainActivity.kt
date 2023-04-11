@@ -20,13 +20,23 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.core.SpringSpec
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.CutCornerShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Button
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -34,7 +44,10 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.glide.GlideImage
@@ -52,10 +65,11 @@ class MainActivity : ComponentActivity() {
 
     setContent {
       OrbitalTheme {
-        OrbitalSharedElementTransitionExample()
-//         OrbitalMultipleSharedElementTransitionExample()
-//         OrbitalTransformationExample()
+//      OrbitalSharedElementTransitionExample()
+//      OrbitalMultipleSharedElementTransitionExample()
+//       OrbitalTransformationExample()
 //         OrbitalMovementExample()
+        MorphingExample()
       }
     }
   }
@@ -69,7 +83,7 @@ private fun OrbitalTransformationExample() {
       modifier = if (isTransformed) {
         Modifier.size(300.dp, 620.dp)
       } else {
-        Modifier.size(100.dp, 220.dp)
+        Modifier.size(100.dp, 2000.dp)
       }.animateTransformation(this, transformationSpec),
       imageModel = { MockUtils.getMockPoster().poster },
       imageOptions = ImageOptions(contentScale = ContentScale.Fit)
@@ -96,9 +110,9 @@ private fun OrbitalMovementExample() {
   val poster = rememberContentWithOrbitalScope {
     GlideImage(
       modifier = if (isTransformed) {
-        Modifier.size(130.dp, 220.dp)
+        Modifier.size(130.dp, 2000.dp)
       } else {
-        Modifier.size(130.dp, 220.dp)
+        Modifier.size(130.dp, 2000.dp)
       }.animateMovement(this, movementSpec),
       imageModel = { ItemUtils.urls[3] },
       imageOptions = ImageOptions(contentScale = ContentScale.Fit)
@@ -140,7 +154,7 @@ private fun OrbitalSharedElementTransitionExample() {
       modifier = if (isTransformed) {
         Modifier.fillMaxSize()
       } else {
-        Modifier.size(130.dp, 220.dp)
+        Modifier.size(130.dp, 2000.dp)
       }.animateSharedElementTransition(
         this,
         SpringSpec(stiffness = 500f),
@@ -184,7 +198,7 @@ private fun OrbitalMultipleSharedElementTransitionExample() {
         modifier = if (isTransformed) {
           Modifier.size(140.dp, 180.dp)
         } else {
-          Modifier.size(100.dp, 220.dp)
+          Modifier.size(100.dp, 2000.dp)
         }
           .animateSharedElementTransition(this, movementSpec, transformationSpec)
           .padding(8.dp),
@@ -214,4 +228,53 @@ private fun OrbitalMultipleSharedElementTransitionExample() {
       ) { items() }
     }
   )
+}
+
+@Composable
+private fun MorphingExample() {
+  var state by rememberSaveable { mutableStateOf(0) }
+  Box(
+    modifier = Modifier
+      .fillMaxSize()
+      .background(Color.Gray)
+      .padding(16.dp)
+  ) {
+      Surface(
+        modifier = Modifier
+          .width(100.dp)
+          .height(100.dp)
+          .align(
+            when (state) {
+              0 -> Alignment.TopStart
+              1 -> Alignment.TopCenter
+              2 -> Alignment.TopEnd
+              3 -> Alignment.CenterEnd
+              4 -> Alignment.BottomEnd
+              5 -> Alignment.BottomCenter
+              6 -> Alignment.BottomStart
+              else -> Alignment.CenterStart
+            }
+          ),
+        color = when (state) {
+          0 -> Color.Yellow
+          1 -> Color.Magenta
+          2 -> Color.Green
+          3 -> Color.Cyan
+          4 -> Color.Red
+          5 -> Color.Black
+          6 -> Color.Blue
+          else -> Color.White
+        },
+        shape = when (state) {
+          0, 4 -> RectangleShape
+          1, 5 -> CircleShape
+          2, 6 -> RoundedCornerShape(16.dp)
+          else -> CutCornerShape(32.dp)
+        }
+      ) {
+    }
+    Button(onClick = { state = (state + 1) % 8 }, modifier = Modifier.align(Alignment.Center)) {
+      Text("Toggle", color = Color.White)
+    }
+  }
 }
