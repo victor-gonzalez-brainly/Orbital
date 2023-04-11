@@ -35,6 +35,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
+import androidx.compose.material.Card
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -239,7 +240,7 @@ private fun MorphingExample() {
       .background(Color.Gray)
       .padding(16.dp)
   ) {
-      Surface(
+      Card(
         modifier = Modifier
           .width(100.dp)
           .height(100.dp)
@@ -255,7 +256,7 @@ private fun MorphingExample() {
               else -> Alignment.CenterStart
             }
           ),
-        color = when (state) {
+        backgroundColor = when (state) {
           0 -> Color.Yellow
           1 -> Color.Magenta
           2 -> Color.Green
