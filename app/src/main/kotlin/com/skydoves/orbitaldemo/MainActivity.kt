@@ -43,6 +43,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -288,5 +289,5 @@ fun animateAlignmentAsState(
   val biased = targetAlignment as BiasAlignment
   val horizontal by animateFloatAsState(biased.horizontalBias)
   val vertical by animateFloatAsState(biased.verticalBias)
-  return derivedStateOf { BiasAlignment(horizontal, vertical) }
+  return remember { derivedStateOf { BiasAlignment(horizontal, vertical) } }
 }
