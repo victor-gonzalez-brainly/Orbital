@@ -253,28 +253,28 @@ private fun MotionExample() {
       .background(Color.Gray)
       .padding(16.dp)
   ) {
-      Card(
-        modifier = Modifier
-          .width(100.dp)
-          .height(100.dp)
-          .align(alignment),
-        backgroundColor = when (state) {
-          0 -> Color.Yellow
-          1 -> Color.Magenta
-          2 -> Color.Green
-          3 -> Color.Cyan
-          4 -> Color.Red
-          5 -> Color.Black
-          6 -> Color.Blue
-          else -> Color.White
-        },
-        shape = when (state) {
-          0, 4 -> RectangleShape
-          1, 5 -> CircleShape
-          2, 6 -> RoundedCornerShape(16.dp)
-          else -> CutCornerShape(32.dp)
-        }
-      ) {
+    Card(
+      modifier = Modifier
+        .width(100.dp)
+        .height(100.dp)
+        .align(alignment),
+      backgroundColor = when (state) {
+        0 -> Color.Yellow
+        1 -> Color.Magenta
+        2 -> Color.Green
+        3 -> Color.Cyan
+        4 -> Color.Red
+        5 -> Color.Black
+        6 -> Color.Blue
+        else -> Color.White
+      },
+      shape = when (state) {
+        0, 4 -> RectangleShape
+        1, 5 -> CircleShape
+        2, 6 -> RoundedCornerShape(16.dp)
+        else -> CutCornerShape(32.dp)
+      }
+    ) {
     }
     Button(onClick = { state = (state + 1) % 8 }, modifier = Modifier.align(Alignment.Center)) {
       Text("Toggle", color = Color.White)
