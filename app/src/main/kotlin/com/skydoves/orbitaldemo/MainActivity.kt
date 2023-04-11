@@ -73,7 +73,7 @@ class MainActivity : ComponentActivity() {
 //      OrbitalMultipleSharedElementTransitionExample()
 //       OrbitalTransformationExample()
 //         OrbitalMovementExample()
-        MorphingExample()
+        MotionExample()
       }
     }
   }
@@ -235,7 +235,7 @@ private fun OrbitalMultipleSharedElementTransitionExample() {
 }
 
 @Composable
-private fun MorphingExample() {
+private fun MotionExample() {
   var state by rememberSaveable { mutableStateOf(0) }
   val alignment by animateAlignmentAsState(when (state) {
     0 -> Alignment.TopStart
