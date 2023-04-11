@@ -19,8 +19,11 @@ package com.skydoves.orbitaldemo
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.SpringSpec
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -237,16 +240,34 @@ private fun OrbitalMultipleSharedElementTransitionExample() {
 @Composable
 private fun MotionExample() {
   var state by rememberSaveable { mutableStateOf(0) }
-  val alignment by animateAlignmentAsState(when (state) {
-    0 -> Alignment.TopStart
-    1 -> Alignment.TopCenter
-    2 -> Alignment.TopEnd
-    3 -> Alignment.CenterEnd
-    4 -> Alignment.BottomEnd
-    5 -> Alignment.BottomCenter
-    6 -> Alignment.BottomStart
-    else -> Alignment.CenterStart
-  })
+  val alignment by animateAlignmentAsState(
+    when (state) {
+      0 -> Alignment.TopStart
+      1 -> Alignment.TopCenter
+      2 -> Alignment.TopEnd
+      3 -> Alignment.CenterEnd
+      4 -> Alignment.BottomEnd
+      5 -> Alignment.BottomCenter
+      6 -> Alignment.BottomStart
+      else -> Alignment.CenterStart
+    }
+  )
+  val bgColor: Color by animateColorAsState(
+    when (state) {
+      0 -> Color.Yellow
+      1 -> Color.Magenta
+      2 -> Color.Green
+      3 -> Color.Cyan
+      4 -> Color.Red
+      5 -> Color.Black
+      6 -> Color.Blue
+      else -> Color.White
+    },
+    animationSpec = sampleColorSpec
+  )
+  Box(modifier = Modifier
+    .size(100.dp)
+    .background(color = bgColor))
   Box(
     modifier = Modifier
       .fillMaxSize()
@@ -258,16 +279,7 @@ private fun MotionExample() {
         .width(100.dp)
         .height(100.dp)
         .align(alignment),
-      backgroundColor = when (state) {
-        0 -> Color.Yellow
-        1 -> Color.Magenta
-        2 -> Color.Green
-        3 -> Color.Cyan
-        4 -> Color.Red
-        5 -> Color.Black
-        6 -> Color.Blue
-        else -> Color.White
-      },
+      backgroundColor = bgColor,
       shape = when (state) {
         0, 4 -> RectangleShape
         1, 5 -> CircleShape
@@ -287,7 +299,16 @@ fun animateAlignmentAsState(
   targetAlignment: Alignment,
 ): State<Alignment> {
   val biased = targetAlignment as BiasAlignment
-  val horizontal by animateFloatAsState(biased.horizontalBias)
-  val vertical by animateFloatAsState(biased.verticalBias)
+  val horizontal by animateFloatAsState(
+    biased.horizontalBias,
+    animationSpec = sampleFloatSpec
+  )
+  val vertical by animateFloatAsState(
+    biased.verticalBias,
+    animationSpec = sampleFloatSpec
+  )
   return remember { derivedStateOf { BiasAlignment(horizontal, vertical) } }
 }
+
+private val sampleFloatSpec = spring<Float>(stiffness = Spring.StiffnessLow)
+private val sampleColorSpec = spring<Color>(stiffness = Spring.StiffnessLow)
